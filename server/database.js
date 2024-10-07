@@ -91,5 +91,5 @@ export async function shareTask(task_id, user_id, shared_with_id) {
     `,
     [task_id, user_id, shared_with_id]
   );
-  return result.insertId;
+  return result;
 }
