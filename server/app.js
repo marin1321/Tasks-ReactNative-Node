@@ -51,18 +51,32 @@ app.delete("/tasks/:id", async (req, res) => {
 });
   
 app.post("/tasks/shared_tasks", async (req, res) => {
-    const { task_id, user_id, email } = req.body;
-    // const { task_id, user_id, shared_with_id } = req.body;
-    const userToShare = await getUserByEmail(email);
-    const sharedTask = await shareTask(task_id, user_id, userToShare.id);
-    res.status(201).send(sharedTask);
+    try {
+        const { task_id, user_id, email } = req.body;
+
+        const userToShare = await getUserByEmail(email);
+        if (!userToShare) {
+            return res.status(404).send({ error: "User not found" });
+        }
+
+        const sharedTask = await shareTask(task_id, user_id, userToShare.id);
+        
+        if (!sharedTask) {
+            return res.status(500).send({ error: "Failed to share task" });
+        }
+
+        res.status(201).send(sharedTask);
+
+    } catch (error) {
+        res.status(500).send({ error: "Internal server error" });
+    }
 });
 
 app.post("/tasks", async (req, res) => {
     const { user_id, title } = req.body;
     const task = await createTask(user_id, title);
     res.status(201).send(task);
-  });
+});
 
 app.listen(8080, () => {
     console.log("Server running on port 8080")
