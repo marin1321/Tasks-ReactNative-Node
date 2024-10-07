@@ -31,7 +31,7 @@ app.get("/tasks/shared_tasks/:id", async (req, res) => {
     const task = await getSharedTaskByID(req.params.id);
     const author = await getUserByID(task.user_id);
     const shared_with = await getUserByID(task.shared_with_id);
-    res.status(201).send({author, shared_with});
+    res.status(200).send({author, shared_with});
 })
 
 app.get("/users/:id", async (req, res) => {
