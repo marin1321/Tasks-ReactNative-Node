@@ -11,6 +11,18 @@ const pool = mysql
   })
   .promise();
 
+export async function createUser(name, email, password) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO users (name, email, password) 
+    VALUES (?, ?, ?)
+  `,
+    [name, email, password]
+  );
+  const taskID = result.insertId;
+  return getTask(taskID);
+}
+
 export async function getTaskByUserID(id) {
   const [rows] = await pool.query(
     `
