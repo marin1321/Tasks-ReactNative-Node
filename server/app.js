@@ -108,8 +108,6 @@ app.post("/tasks/shared_tasks", authenticateToken, async (req, res) => {
     const { task_id, user_id, email } = req.body;
     // const { task_id, user_id, shared_with_id } = req.body;
     const userToShare = await getUserByEmail(email);
-    console.log(userToShare);
-    
     const sharedTask = await shareTask(task_id, user_id, userToShare.id);
     res.status(201).send(sharedTask);
 });

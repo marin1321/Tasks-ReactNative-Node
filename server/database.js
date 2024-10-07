@@ -103,5 +103,12 @@ export async function shareTask(task_id, user_id, shared_with_id) {
     `,
     [task_id, user_id, shared_with_id]
   );
-  return result;
+  const [sharedTask] = await pool.query(
+    `
+    SELECT * FROM share_task 
+    WHERE id = ?;
+    `,
+    [result.insertId]
+  );
+  return sharedTask[0];
 }
